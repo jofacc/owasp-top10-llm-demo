@@ -174,6 +174,23 @@ a{color:var(--accent);text-decoration:none}
 .file-item{font-size:13px;font-family:var(--mono);padding:5px 8px;border-radius:5px;background:var(--bg-3)}
 .file-item.gone{color:var(--danger);text-decoration:line-through}
 
+/* LLM06 工具清单卡片 */
+.tools-card{margin-top:12px;background:var(--bg-2);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden}
+.tools-card-head{padding:10px 14px;font-size:13px;font-weight:600;color:var(--fg);user-select:none}
+.tools-card-head:hover{background:var(--bg-3)}
+.tools-body{padding:0 14px 10px}
+.tools-table{width:100%;border-collapse:collapse;font-size:12.5px}
+.tools-table th{text-align:left;padding:7px 10px;color:var(--fg-dim);font-weight:500;font-size:11.5px;
+  border-bottom:1px solid var(--line);white-space:nowrap}
+.tools-table td{padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:middle}
+.tools-table td:first-child{width:180px}
+.tools-table td:last-child{width:90px;white-space:nowrap}
+.tools-table tbody tr:last-child td{border-bottom:none}
+.tools-table code{font-family:var(--mono);font-size:12px;color:var(--accent);background:var(--bg-3);padding:2px 6px;border-radius:4px}
+.tool-safe td:first-child{border-left:3px solid #4a9}
+.tool-warn td:first-child{border-left:3px solid #ca8}
+.tool-danger td:first-child{border-left:3px solid var(--danger)}
+
 /* LLM08 命中文档 */
 .hits{display:flex;flex-direction:column;gap:6px;margin-top:6px}
 .hit-item{background:var(--bg-2);border-left:3px solid var(--fg-dim);

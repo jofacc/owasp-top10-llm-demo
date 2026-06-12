@@ -380,6 +380,9 @@ function renderExtraPanel(id, p){
       onclick: () => llm06_reset()}, '🔄 重置收件箱'));
     ex.appendChild(ctrlRow);
 
+    // 工具清单列表
+    build_llm06_tools_card(ex);
+
     const grid = el('div',{style:'display:grid;grid-template-columns:280px 1fr;gap:14px;margin-top:10px;align-items:start'});
     // 左：沙箱文件列表 + 工具条
     const left = el('div',{});
@@ -428,6 +431,42 @@ function renderExtraPanel(id, p){
     ex.appendChild(el('div',{class:'muted small',style:'margin-top:6px'}, '模型基于检索结果回答 ↓'));
     ex.appendChild(el('div',{id:'llm08_answer', class:'code-block'}, '[等待运行]'));
   }
+}
+
+// ---------- LLM06 工具清单 ----------
+function build_llm06_tools_card(parent){
+  const tools = [
+    {name:'list_files',   desc:'列出收件箱所有文件',             params:'无',        risk:'safe',    icon:'📋'},
+    {name:'read_file',    desc:'读取某个文件内容',               params:'文件名',      risk:'safe',    icon:'📖'},
+    {name:'fetch_remote', desc:'向外部服务器拉取通知/指令',        params:'URL地址',     risk:'warn',    icon:'🌐'},
+    {name:'delete_file',  desc:'永久删除文件（不可恢复）',         params:'文件名',      risk:'danger',  icon:'🗑'},
+    {name:'upload_to_url',desc:'把文件内容发送到外部归档服务器',    params:'文件名',      risk:'danger',  icon:'📤'},
+  ];
+
+  const card = el('div',{class:'tools-card'});
+  const head = el('div',{class:'tools-card-head', style:'display:flex;align-items:center;gap:8px;cursor:pointer',
+    onclick:()=>{ const b=card.querySelector('.tools-body'); b.style.display=b.style.display==='none'?'':'none'; }},
+    '🧰 AI 文件管家工具能力清单（点击展开/收起，共 ' + tools.length + ' 项）');
+  card.appendChild(head);
+
+  const body = el('div',{class:'tools-body'});
+  const riskLabel = {safe:'🟢 只读', warn:'🟡 网络', danger:'🔴 高危'};
+  const riskCSS  = {safe:'tool-safe', warn:'tool-warn', danger:'tool-danger'};
+
+  const table = el('table',{class:'tools-table'});
+  table.innerHTML =
+    '<thead><tr><th>工具</th><th>能力描述</th><th>参数</th><th>风险等级</th></tr></thead>' +
+    '<tbody>' + tools.map(t =>
+      `<tr class="${riskCSS[t.risk]}">
+        <td><code>${t.icon} ${t.name}</code></td>
+        <td>${t.desc}</td>
+        <td class="muted">${t.params}</td>
+        <td>${riskLabel[t.risk]}</td>
+      </tr>`
+    ).join('') + '</tbody>';
+  body.appendChild(table);
+  card.appendChild(body);
+  parent.appendChild(card);
 }
 
 // ---------- LLM06 真 Agent：AI 文件管家 ----------
