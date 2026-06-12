@@ -1,0 +1,22 @@
+# Python bytecode
+__pycache__/
+*.pyc
+*.pyo
+
+# Runtime logs
+logs/
+
+# macOS
+.DS_Store
+
+# Empty placeholder dirs
+sandbox/
+static/
+mock_pages/
+middleware/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo

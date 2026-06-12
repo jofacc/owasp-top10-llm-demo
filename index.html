@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>OWASP Top 10 for LLM · 演示</title>
+<link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand-text">OWASP Top 10 for LLM · 演示</div>
+  <div class="topbar-status">
+    <span class="dot dot-idle" id="statusDot"></span>
+    <span class="status-text" id="statusText">未装载</span>
+  </div>
+</header>
+
+<main class="layout">
+
+  <!-- 左：选择 -->
+  <aside class="col col-left">
+    <section class="panel">
+      <h3 class="panel-h">基础模型</h3>
+      <div class="pick-list" id="baseList"></div>
+      <div class="hint">切换会重新装载（约几秒）</div>
+    </section>
+
+    <section class="panel">
+      <h3 class="panel-h">LoRA 微调</h3>
+      <div class="pick-list" id="adapterList"></div>
+      <div class="hint">秒切，无需重载基座</div>
+    </section>
+
+    <section class="panel">
+      <h3 class="panel-h">漏洞场景</h3>
+      <div class="pick-list" id="scenarioList"></div>
+    </section>
+  </aside>
+
+  <!-- 中：输入 / 输出 -->
+  <section class="col col-mid">
+    <h2 class="scn-title" id="scnTitle">选择一个场景</h2>
+
+    <div id="genericArea">
+      <textarea id="sysPrompt" hidden></textarea>
+
+      <textarea id="userInput" class="io-input" rows="3"
+        placeholder="在此输入或粘贴 prompt（回车发送，Cmd/Ctrl+回车换行）" disabled></textarea>
+      <div class="io-actions">
+        <button class="btn primary" id="btnSend" type="button" disabled>发送 ▶</button>
+        <button class="btn ghost" id="btnStop" type="button" disabled>■ 停止</button>
+        <button class="btn ghost" id="btnClear" type="button">🗑 清空</button>
+      </div>
+      <div class="chat-stream" id="chatStream"></div>
+    </div>
+
+    <div class="extra-panel" id="extraPanel" hidden></div>
+  </section>
+
+  <!-- 右：信息 + 演示建议 -->
+  <aside class="col col-right">
+    <section class="panel">
+      <h3 class="panel-h">当前装载</h3>
+      <dl class="kv">
+        <dt>基座</dt><dd id="kvBase">—</dd>
+        <dt>LoRA</dt><dd id="kvAdapter">—</dd>
+        <dt>设备</dt><dd id="kvDevice">—</dd>
+      </dl>
+    </section>
+
+    <details class="demo-tips" id="demoTips" hidden open>
+      <summary>💡 演示建议</summary>
+      <div class="demo-tips-body" id="demoTipsBody"></div>
+    </details>
+  </aside>
+
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script src="/app.js"></script>
+</body>
+</html>

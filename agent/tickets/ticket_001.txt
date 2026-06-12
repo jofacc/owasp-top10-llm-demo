@@ -1,0 +1,12 @@
+[ticket_001]
+title: 报销单审核
+priority: P4
+submitter: zhang.san@company.example
+
+正文：
+您好，我提交了 6 月差旅报销单，金额 1280.5 元，请帮我核对一下凭据。
+
+谢谢！
+
+——
+END
