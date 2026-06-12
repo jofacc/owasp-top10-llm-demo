@@ -703,8 +703,8 @@ class Handler(BaseHTTPRequestHandler):
         body = self._read_json()
         task = body.get("task") or "请帮我整理一下收件箱文件夹。"
         defense = bool(body.get("defense", False))
-        mode = body.get("mode") or "remote"   # local 本地投毒 / remote 间接二段注入
-        if mode not in ("local", "remote"):
+        mode = body.get("mode") or "remote"   # local 本地投毒 / remote 间接二段注入 / url URL投毒
+        if mode not in ("local", "remote", "url"):
             mode = "remote"
         approved = set(body.get("approved") or [])
         from agent.file_agent import run_file_agent
@@ -738,7 +738,7 @@ class Handler(BaseHTTPRequestHandler):
         from agent import real_tools
         body = self._read_json()
         mode = body.get("mode") or "remote"
-        if mode not in ("local", "remote"):
+        if mode not in ("local", "remote", "url"):
             mode = "remote"
         real_tools.reset_sandbox(mode)
         return self._json(200, {"ok": True, "mode": mode, **real_tools.list_files()})

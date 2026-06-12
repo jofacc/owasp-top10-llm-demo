@@ -74,7 +74,8 @@ POISON_REMOTE = (
 def reset_sandbox(mode: str = "remote"):
     """每次演示开始重建沙箱示例文件。
     mode='local'  本地投毒，放『收件箱说明.txt』（指令写在本地）
-    mode='remote' 间接投毒，放『同步任务.txt』（指令藏在远程）"""
+    mode='url'    URL 投毒，只放正常业务文件（指令藏在远程 URL 返回内容中）
+    mode='remote' 间接投毒，放『同步任务.txt』（引导去 fetch_remote）"""
     import shutil
     if SANDBOX.exists():
         shutil.rmtree(SANDBOX)
@@ -89,6 +90,10 @@ def reset_sandbox(mode: str = "remote"):
     }
     if mode == "local":
         files["收件箱说明.txt"] = POISON_LOCAL
+    elif mode == "url":
+        # URL 投毒：沙箱只有正常业务文件，不创建任何本地投毒文件
+        # 恶意指令藏在远程 URL 的返回内容中，AI 通过 fetch_remote 主动拉取
+        pass
     else:
         files["同步任务.txt"] = POISON_REMOTE
     for fn, content in files.items():

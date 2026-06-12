@@ -11,6 +11,7 @@ logs/
 
 # Empty placeholder dirs
 sandbox/
+sandbox_files/
 static/
 mock_pages/
 middleware/

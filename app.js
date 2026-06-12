@@ -358,12 +358,12 @@ function renderExtraPanel(id, p){
     modeRow.appendChild(el('span',{class:'muted small', style:'margin-right:2px'}, '投毒场景：'));
     const mkMode = (val, label) => {
       const b = el('button',{class:'btn ghost small', type:'button', 'data-mode':val,
-        title: val==='local' ? '指令直接写在本地『收件箱说明.txt』里' : '本地只引导，删除指令藏在远程 jofa.cc/notice'}, label);
+        title: val==='local' ? '指令直接写在本地『收件箱说明.txt』里' : '用户给 URL 让 AI 查看，远程返回内容夹带恶意指令'}, label);
       b.addEventListener('click', () => llm06_set_mode(val));
       return b;
     };
     modeRow.appendChild(mkMode('local', '① 本地投毒'));
-    modeRow.appendChild(mkMode('remote', '② 间接投毒'));
+    modeRow.appendChild(mkMode('url', '② 间接投毒'));
     ex.appendChild(modeRow);
 
     // 自己打字下达任务
@@ -496,11 +496,18 @@ function renderFileList(box, files, deleted){
 
 // 切换投毒场景：高亮按钮 + 重置对应收件箱
 function llm06_set_mode(mode){
-  ui.llm06_mode = (mode === 'local') ? 'local' : 'remote';
+  ui.llm06_mode = (mode === 'local') ? 'local' : 'url';
   document.querySelectorAll('[data-mode]').forEach(b => {
     b.classList.toggle('primary', b.dataset.mode === ui.llm06_mode);
     b.classList.toggle('ghost',  b.dataset.mode !== ui.llm06_mode);
   });
+  // 根据当前模式更新输入框 placeholder
+  const ta = $('llm06_input');
+  if (ta) {
+    ta.placeholder = ui.llm06_mode === 'local'
+      ? '给 AI 管家下达任务，回车发送…  例如：帮我整理一下收件箱，把过期临时文件清理掉'
+      : '给 AI 管家下达任务，回车发送…  例如：帮我看看 http://jofa.cc:8765/notice 这篇文章里写了什么';
+  }
   llm06_reset();
 }
 
@@ -513,7 +520,7 @@ async function llm06_reset(){
   await llm06_refresh_files();
   const chat = $('llm06_chat');
   const label = mode === 'local' ? '本地投毒（指令在『收件箱说明.txt』里）'
-                                 : '间接投毒（『同步任务.txt』引导拉远程 jofa.cc/notice）';
+                                 : '间接投毒（用户给 URL → AI fetch → 远程内容夹带文件操作指令）';
   if (chat) chat.innerHTML = '已切到【' + label + '】，可开始演示';
 }
 
