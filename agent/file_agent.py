@@ -147,7 +147,10 @@ def run_file_agent(task: str, defense: bool, chat_with_tools, pending_approvals=
     events = []
     approved = approved or set()
 
-    real_tools.reset_sandbox(mode)
+    # 不再每次都 reset_sandbox —— 保留上一次操作的文件状态（如复制副本）
+    # 只在沙箱不存在时才初始化；用户点"重置"按钮时由 /api/llm06/reset 重建
+    if not real_tools.SANDBOX.exists() or not any(real_tools.SANDBOX.iterdir()):
+        real_tools.reset_sandbox(mode)
     poison_file = "收件箱说明.txt" if mode == "local" else "同步任务.txt"
     files_before = [f["name"] for f in real_tools.list_files()["files"]]
     _emit(events, "init", files=files_before,
