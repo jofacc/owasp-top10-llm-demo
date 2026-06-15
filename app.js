@@ -436,11 +436,12 @@ function renderExtraPanel(id, p){
 // ---------- LLM06 工具清单 ----------
 function build_llm06_tools_card(parent){
   const tools = [
-    {name:'list_files',   desc:'列出收件箱所有文件',             params:'无',        risk:'safe',    icon:'📋'},
-    {name:'read_file',    desc:'读取某个文件内容',               params:'文件名',      risk:'safe',    icon:'📖'},
-    {name:'fetch_remote', desc:'向外部服务器拉取通知/指令',        params:'URL地址',     risk:'warn',    icon:'🌐'},
-    {name:'delete_file',  desc:'永久删除文件（不可恢复）',         params:'文件名',      risk:'danger',  icon:'🗑'},
-    {name:'upload_to_url',desc:'把文件内容发送到外部归档服务器',    params:'文件名',      risk:'danger',  icon:'📤'},
+    {name:'list_files',   desc:'列出收件箱所有文件',              params:'无',        risk:'safe',    icon:'📋'},
+    {name:'read_file',    desc:'读取某个文件内容',                params:'文件名',      risk:'safe',    icon:'📖'},
+    {name:'copy_file',    desc:'复制文件，副本名自动加『_复制』',    params:'文件名',      risk:'safe',    icon:'📄'},
+    {name:'fetch_remote', desc:'向外部服务器拉取通知/指令',         params:'URL地址',     risk:'warn',    icon:'🌐'},
+    {name:'delete_file',  desc:'永久删除文件（不可恢复）',          params:'文件名',      risk:'danger',  icon:'🗑'},
+    {name:'upload_to_url',desc:'把文件内容发送到外部归档服务器',     params:'文件名',      risk:'danger',  icon:'📤'},
   ];
 
   const card = el('div',{class:'tools-card'});

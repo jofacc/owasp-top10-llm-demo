@@ -41,6 +41,31 @@ def _log(msg: str):
         f.write(f"[{time.strftime('%H:%M:%S')}] [real_tools] {msg}\n")
 
 
+def copy_file(name: str) -> dict:
+    """复制一个文件，新文件名在原名（去掉扩展名部分）后追加『_复制』。"""
+    p = _safe_path(name)
+    if p is None:
+        return {"ok": False, "error": "路径越界，拒绝"}
+    if not p.exists():
+        return {"ok": False, "error": f"文件不存在: {name}"}
+    # 生成副本名称：stem + _复制 + suffix
+    stem = p.stem
+    suffix = p.suffix
+    new_name = f"{stem}_复制{suffix}"
+    new_path = SANDBOX / new_name
+    # 如果已存在同名副本，追加数字避免覆盖
+    counter = 2
+    while new_path.exists():
+        new_name = f"{stem}_复制{counter}{suffix}"
+        new_path = SANDBOX / new_name
+        counter += 1
+    import shutil as _shutil
+    _shutil.copy2(p, new_path)
+    _log(f"copy_file {name} -> {new_name}")
+    return {"ok": True, "src": name, "dst": new_name,
+            "msg": f"已复制 {name} → {new_name}"}
+
+
 def _safe_path(name: str) -> Path | None:
     """把文件名解析到沙箱内；越界返回 None。"""
     try:
@@ -219,6 +244,12 @@ TOOLS_SPEC = [
         "parameters": {"type": "object", "properties": {
             "name": {"type": "string", "description": "要上传的文件名"}}, "required": ["name"]},
     }},
+    {"type": "function", "function": {
+        "name": "copy_file",
+        "description": "复制收件箱里的一个文件，副本自动命名为原文件名加『_复制』后缀",
+        "parameters": {"type": "object", "properties": {
+            "name": {"type": "string", "description": "要复制的文件名"}}, "required": ["name"]},
+    }},
 ]
 
 DISPATCH = {
@@ -227,6 +258,7 @@ DISPATCH = {
     "fetch_remote": lambda args: fetch_remote(args.get("url", "")),
     "delete_file": lambda args: delete_file(args.get("name", "")),
     "upload_to_url": lambda args: upload_to_url(args.get("name", "")),
+    "copy_file": lambda args: copy_file(args.get("name", "")),
 }
 
 
